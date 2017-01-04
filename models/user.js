@@ -2,10 +2,22 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  firstName: String,
-  lastName: String,
-  email: String,
-  password: String
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
 });
 
 userSchema.statics.findByEmail = function (email) {

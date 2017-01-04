@@ -17,11 +17,22 @@ describe("Users", function() {
   // });
 
   it("can be saved", function(done) {
-    new User({ firstName: "test" }).save(done);
+    new User(
+      { firstName: "test",
+        lastName: "test",
+        email: "test",
+        password: "test"
+      }
+    ).save(done);
   });
 
   it("can be created", function(done) {
-    new User({ firstName: "test" }).save(function(err, model) {
+    new User(
+      { firstName: "test",
+        lastName: "test",
+        email: "test",
+        password: "test"
+      }).save(function(err, model) {
       if(err) return done(err);
 
       User.find({}, function(err, docs){
