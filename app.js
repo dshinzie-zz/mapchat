@@ -12,6 +12,7 @@ var app = express();
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/mapchat');
 mongoose.connection.on('connected', function() {
   console.log('Mongoose default connection open to ' + mongoose.connection.name);
