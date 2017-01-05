@@ -8,9 +8,13 @@ var methodOverride = require('method-override');
 var fs = require('fs');
 var app = express();
 
+//google oauth
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
+var plus = google.plus('v1');
 var authKeys = require('./config/google_auth').googleAuth;
+var User = require('../models/user');
+
 
 var session = require('express-session');
 
@@ -57,7 +61,9 @@ app.use('/', index);
 var oauth2Client = new OAuth2(authKeys.clientId, authKeys.clientSecret, authKeys.callbackUrl);
 
 var scopes = [
-  'https://www.googleapis.com/auth/gmail.readonly'
+  'https://www.googleapis.com/auth/plus.me',
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/plus.login'
 ];
 
 var url = oauth2Client.generateAuthUrl({
@@ -69,22 +75,38 @@ app.locals.authUrl = url;
 app.locals.authUser = url //find user id/ store in model;
 
 app.get("/auth/google/callback", function(req, res) {
-
   var code = req.query.code;
   console.log("Callback code is: " + code);
 
-  oauth2Client.getToken(code, function (err, tokens) {
-    if (!err) {
-      oauth2Client.setCredentials(tokens);
-      session["tokens"] = tokens;
-      }
-  });
+  getGoogleToken(oauth2Client, code);
+
   res.render("index");
 });
 
 google.options({
   auth: oauth2Client
 });
+
+function getGoogleToken (googleClient, code) {
+  googleClient.getToken(code, function (err, tokens) {
+    if (!err) {
+      googleClient.setCredentials(tokens);
+      console.log(googleClient);
+      session["token"] = tokens;
+      getGoogleProfile(googleClient);
+      }
+  });
+}
+
+function getGoogleProfile(googleClient) {
+  plus.people.get({ userId: 'me', auth: googleClient }, function(err, profile) {
+    if(err) {
+      return console.log(err);
+    }
+      console.log(profile);
+  });
+}
+
 
 
 
