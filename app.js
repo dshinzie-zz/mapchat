@@ -8,17 +8,19 @@ var methodOverride = require('method-override');
 var fs = require('fs');
 var app = express();
 
+<<<<<<< HEAD
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 
 var session = require('express-session');
 
+=======
+>>>>>>> 4b566921d8a1071fee40d832eb3aa8accc0eba7c
 //mongo db setup
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-
 mongoose.connect('mongodb://localhost/mapchat');
 mongoose.connection.on('connected', function() {
   console.log('Mongoose default connection open to ' + mongoose.connection.name);
@@ -31,6 +33,7 @@ app.listen(mongoose.connection.port, function(err){
 // routes
 var index = require('./routes/index');
 // var users = require('./routes/users');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -48,7 +51,6 @@ app.use(methodOverride());
 
 app.use('/', index);
 // app.use('/users', users);
-
 
 
 
@@ -88,9 +90,6 @@ app.get("/auth/google/callback", function(req, res) {
 google.options({
   auth: oauth2Client
 });
-
-
-
 
 
 
