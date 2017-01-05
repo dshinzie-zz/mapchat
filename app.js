@@ -108,9 +108,9 @@ function getGoogleProfile(googleClient) {
   });
 }
 
-function findOrCreateUser(googleProfile, session["token"]){
-
-}
+// function findOrCreateUser(googleProfile, session["token"]){
+//
+// }
 
 
 //setup MVCish structure

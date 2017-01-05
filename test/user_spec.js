@@ -84,14 +84,10 @@ describe("Users", function() {
     var newProfile = { id: 1, name: { givenName: "testFirst", familyName: "testLast" }};
     var newToken = '999';
 
-    User.findOrCreateUser(newProfile, newToken).exec(function(err, user) {
-      console.log(user);
-    })
-    // .then(function(user){
-    //   doc.token.should.eq(newToken);
-    //   done();
-    // });
-
+    User.findOrCreateUser(newProfile, newToken, function(user){
+      user.token.should.eq(newToken);
+      done();
+      });
   });
 
 
