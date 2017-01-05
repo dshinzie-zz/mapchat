@@ -4,8 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var methodOverride = require('method-override');
+var fs = require('fs');
 var app = express();
 
 //mongo db setup
@@ -24,7 +24,7 @@ app.listen(mongoose.connection.port, function(err){
 
 // routes
 var index = require('./routes/index');
-var users = require('./routes/users');
+// var users = require('./routes/users');
 
 
 // view engine setup
@@ -42,7 +42,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride());
 
 app.use('/', index);
-app.use('/users', users);
+// app.use('/users', users);
+
+
+//setup MVCish structure
+fs.readdirSync('./controllers').forEach(function(file){
+  if(file.substr(-3) == '.js'){
+    route = require('./controllers/' + file);
+    route.controller(app);
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
