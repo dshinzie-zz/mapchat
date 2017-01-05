@@ -21,8 +21,7 @@ var userSchema = new Schema({
 });
 
 userSchema.statics.findByEmail = function (email) {
-  return console.log("is this hitting");
-  // return this.model('User').find({email: email});
+  return this.model('User', userSchema).findOne({ email: email });
 }
 
 userSchema.methods.test = function test(){
