@@ -90,5 +90,27 @@ describe("Users", function() {
       });
   });
 
+  it("can find a existing user with the profile information", function(done){
+    var newProfile = { id: 1, name: { givenName: "testFirst", familyName: "testLast" }};
+    var newToken = '999';
+
+    var newUser = new User(
+      { firstName: "test",
+        lastName: "test",
+        email: "test",
+        password: "test",
+        googleId: 1
+      }).save(function(err, model) {
+
+        if(err) return done(err);
+
+        User.findOrCreateUser(newProfile, newToken, function(user){
+          user.email.should.eq("test");
+          user.googleId.should.eq(newProfile["id"])
+          done();
+          });
+        });
+  });
+
 
 });

@@ -31,10 +31,7 @@ userSchema.statics.findOrCreateUser = function(profile, token, cb){
       console.log(result);
       return cb(result);
     };
-
   });
-
-
 }
 
 var User = mongoose.model('User', userSchema);
