@@ -80,5 +80,19 @@ describe("Users", function() {
     });
   });
 
+  it("can create a new user with profile information", function(done){
+    var newProfile = { id: 1, name: { givenName: "testFirst", familyName: "testLast" }};
+    var newToken = '999';
+
+    User.findOrCreateUser(newProfile, newToken).exec(function(err, user) {
+      console.log(user);
+    })
+    // .then(function(user){
+    //   doc.token.should.eq(newToken);
+    //   done();
+    // });
+
+  });
+
 
 });

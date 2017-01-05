@@ -104,10 +104,13 @@ function getGoogleProfile(googleClient) {
       return console.log(err);
     }
       console.log(profile);
+      session["googleId"] = profile["id"]
   });
 }
 
+function findOrCreateUser(googleProfile, session["token"]){
 
+}
 
 
 //setup MVCish structure
