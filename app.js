@@ -11,6 +11,7 @@ var app = express();
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 
+var session = require('express-session');
 
 //mongo db setup
 var mongo = require('mongodb');
@@ -49,6 +50,9 @@ app.use('/', index);
 // app.use('/users', users);
 
 
+
+
+
 //google oauth
 var oauth2Client = new OAuth2(
   "1028958173040-6fkakn3raqglbmbjmhc4l8eeelp09vgg.apps.googleusercontent.com",
@@ -66,6 +70,7 @@ var url = oauth2Client.generateAuthUrl({
 });
 
 app.locals.authUrl = url;
+app.locals.authUser = url //find user id/ store in model;
 
 app.get("/auth/google/callback", function(req, res) {
 
@@ -74,6 +79,7 @@ app.get("/auth/google/callback", function(req, res) {
   oauth2Client.getToken(code, function (err, tokens) {
     if (!err) {
       oauth2Client.setCredentials(tokens);
+      session["tokens"] = tokens;
       }
   });
   res.render("index");
