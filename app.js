@@ -10,6 +10,7 @@ var app = express();
 
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
+var authKeys = require('./config/google_auth').googleAuth;
 
 var session = require('express-session');
 
@@ -53,11 +54,7 @@ app.use('/', index);
 
 
 //google oauth
-var oauth2Client = new OAuth2(
-  "1028958173040-6fkakn3raqglbmbjmhc4l8eeelp09vgg.apps.googleusercontent.com",
-  "sAbl0sxxRRMfa1A13gCqyY5-",
-  "http://localhost:3000/auth/google/callback"
-);
+var oauth2Client = new OAuth2(authKeys.clientId, authKeys.clientSecret, authKeys.callbackUrl);
 
 var scopes = [
   'https://www.googleapis.com/auth/gmail.readonly'
@@ -74,6 +71,7 @@ app.locals.authUser = url //find user id/ store in model;
 app.get("/auth/google/callback", function(req, res) {
 
   var code = req.query.code;
+  console.log("Callback code is: " + code);
 
   oauth2Client.getToken(code, function (err, tokens) {
     if (!err) {

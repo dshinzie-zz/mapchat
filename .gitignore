@@ -30,5 +30,5 @@
 node_modules/
 npm-debug.log
 data/
- +client_secret.json
- +auth.js
+client_secret.json
+google_auth.js
