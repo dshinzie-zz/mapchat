@@ -11,11 +11,20 @@ a {
   display: inline-block;
 }
 
+.navbar {
+  margin-bottom: 10px;
+}
+
 .navbar-inner li{
   line-height: 40px;
   letter-spacing:2px;
 }
 
+.nav-link {
+  border-top: 4px solid white;
+  transition: border-top .3s;
+  &:hover{border-top: 4px solid dodgerblue;}
+}
 
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{
   background-image:none;
