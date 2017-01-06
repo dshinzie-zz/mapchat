@@ -13,10 +13,16 @@ var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var plus = google.plus('v1');
 var authKeys = require('./config/google_auth').googleAuth;
-var User = require('../models/user');
-
+var User = require('./models/user');
 
 var session = require('express-session');
+
+//bootstrap
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+
+var expressLayouts = require('express-ejs-layouts');
 
 //mongo db setup
 var mongo = require('mongodb');
@@ -41,6 +47,8 @@ var index = require('./routes/index');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -49,9 +57,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use(methodOverride());
 
 app.use('/', index);
+// app.use('/login', index);
 // app.use('/users', users);
 
 

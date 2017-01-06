@@ -7,6 +7,10 @@ module.exports.controller = function(app) {
     res.render('users/new');
   });
 
+  app.get('/login', function(req, res) {
+    res.render('login');
+  });
+
   app.post('/users', function(req, res) {
     User.create({
       firstName: req.body["new-first"],
