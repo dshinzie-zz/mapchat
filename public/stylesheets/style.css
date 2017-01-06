@@ -6,3 +6,48 @@ body {
 a {
   color: #00B7FF;
 }
+
+.nav {
+  display: inline-block;
+}
+
+.navbar {
+  margin-bottom: 10px;
+}
+
+.navbar-inner li{
+  line-height: 40px;
+  letter-spacing:2px;
+}
+
+.nav-link {
+  border-top: 4px solid white;
+  transition: border-top .3s;
+  &:hover{border-top: 4px solid dodgerblue;}
+}
+
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{
+  background-image:none;
+  background-color:dodgerblue;
+}
+
+.header{
+  background-color: rgba(255,255,255, .95);
+
+  border-bottom:2px solid dodgerblue !important;
+  line-height: 40px !important;
+  box-shadow: 0 12px 6px -6px rgba(0,0,0, .2) !important;
+}
+
+.dropdown-menu::before,
+.dropdown-menu::after {
+    border: none;
+    content: none !important;
+}
+
+.dropdown-menu{
+    border-radius:3%;
+    z-index:-3;
+    margin-top:-10px;
+    margin-right: -60% !important;
+}

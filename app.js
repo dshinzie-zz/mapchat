@@ -8,6 +8,22 @@ var methodOverride = require('method-override');
 var fs = require('fs');
 var app = express();
 
+//google oauth
+var google = require('googleapis');
+var OAuth2 = google.auth.OAuth2;
+var plus = google.plus('v1');
+var authKeys = require('./config/google_auth').googleAuth;
+var User = require('./models/user');
+
+var session = require('express-session');
+
+//bootstrap
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+
+var expressLayouts = require('express-ejs-layouts');
+
 //mongo db setup
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -29,7 +45,9 @@ var index = require('./routes/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
+
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -39,10 +57,70 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use(methodOverride());
 
 app.use('/', index);
+// app.use('/login', index);
 // app.use('/users', users);
+
+
+
+
+//google oauth
+var oauth2Client = new OAuth2(authKeys.clientId, authKeys.clientSecret, authKeys.callbackUrl);
+
+var scopes = [
+  'https://www.googleapis.com/auth/plus.me',
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/plus.login'
+];
+
+var url = oauth2Client.generateAuthUrl({
+  access_type: 'offline',
+  scope: scopes
+});
+
+app.locals.authUrl = url;
+app.locals.authUser = url //find user id/ store in model;
+
+app.get("/auth/google/callback", function(req, res) {
+  var code = req.query.code;
+  console.log("Callback code is: " + code);
+
+  getGoogleToken(oauth2Client, code);
+
+  res.render("index");
+});
+
+google.options({
+  auth: oauth2Client
+});
+
+function getGoogleToken (googleClient, code) {
+  googleClient.getToken(code, function (err, tokens) {
+    if (!err) {
+      googleClient.setCredentials(tokens);
+      console.log(googleClient);
+      session["token"] = tokens;
+      getGoogleProfile(googleClient);
+      }
+  });
+}
+
+function getGoogleProfile(googleClient) {
+  plus.people.get({ userId: 'me', auth: googleClient }, function(err, profile) {
+    if(err) {
+      return console.log(err);
+    }
+      console.log(profile);
+      session["googleId"] = profile["id"]
+  });
+}
+
+// function findOrCreateUser(googleProfile, session["token"]){
+//
+// }
 
 
 //setup MVCish structure
