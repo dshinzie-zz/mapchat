@@ -1,9 +1,8 @@
-var dbURI    = 'mongodb://localhost/mapchat'
-  , should   = require('chai').should()
-  , mongoose = require('mongoose')
-  , User = require('../models/user')
-  , clearDB  = require('mocha-mongoose')(dbURI)
-;
+var dbURI    = 'mongodb://localhost/mapchat',
+    should   = require('chai').should(),
+    mongoose = require('mongoose'),
+    User = require('../models/user'),
+    clearDB  = require('mocha-mongoose')(dbURI);
 
 describe("Users", function() {
   beforeEach(function(done) {
@@ -17,22 +16,21 @@ describe("Users", function() {
   });
 
   it("can be saved", function(done) {
-    new User(
-      { firstName: "test",
-        lastName: "test",
-        email: "test",
-        password: "test"
-      }
-    ).save(done);
+    new User({
+      firstName: "test",
+      lastName: "test",
+      email: "test",
+      password: "test"
+      }).save(done);
   });
 
   it("can be saved and listed", function(done) {
-    new User(
-      { firstName: "test",
-        lastName: "test",
-        email: "test",
-        password: "test"
-      }).save(function(err, model) {
+    new User({
+      firstName: "test",
+      lastName: "test",
+      email: "test",
+      password: "test"
+    }).save(function(err, model) {
 
       if(err) return done(err);
 

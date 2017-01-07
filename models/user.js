@@ -7,7 +7,8 @@ var userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   googleId: { type: Number, default: null },
-  token: { type: String, default: null }
+  token: { type: String, default: null },
+  created_at: { type: Date, default: Date.now }
 });
 
 userSchema.statics.findByEmail = function (email) {

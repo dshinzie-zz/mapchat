@@ -35,7 +35,7 @@ mongoose.connection.on('connected', function() {
 })
 app.listen(mongoose.connection.port, function(err){
   if(err) throw err;
-  console.log("App listening on port" + mongoose.connection.port);
+  console.log("MongoDB listening on port " + mongoose.connection.port);
 })
 
 // routes
@@ -60,9 +60,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(methodOverride());
 
-app.use('/', index);
+// app.use('/', index);
 // app.use('/login', index);
 // app.use('/users', users);
+
+
+
+
+// sockets
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(3000);
+console.log("Listening on port 3000");
+
+app.get('/', function (req, res) {
+  res.render('index.ejs');
+});
+
+io.on('connection', function(socket){
+  console.log("User connected");
+
+  socket.on('send message', function(msg){
+    //message received from client
+    console.log('message: ' +  msg);
+
+    //send message back to client for everyone to see
+    io.emit('send message', msg);
+  });
+
+  socket.on('disconnect', function(){
+    console.log('User disconnected');
+  });
+});
+
 
 
 
