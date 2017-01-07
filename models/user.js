@@ -8,6 +8,7 @@ var userSchema = new Schema({
   password: { type: String, required: true },
   googleId: { type: Number, default: null },
   token: { type: String, default: null },
+  chatRooms: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   created_at: { type: Date, default: Date.now }
 });
 
@@ -29,7 +30,6 @@ userSchema.statics.findOrCreateUser = function(profile, token, cb){
       result.token = token;
       result.firstName = profile["name"]["givenName"];
       result.lastName = profile["name"]["familyName"];
-      console.log(result);
       return cb(result);
     };
   });
