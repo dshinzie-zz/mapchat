@@ -9,7 +9,7 @@ var userSchema = new Schema({
   googleId: { type: Number, default: null },
   token: { type: String, default: null },
   chatRooms: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  created_at: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now }
 });
 
 userSchema.statics.findByEmail = function (email) {

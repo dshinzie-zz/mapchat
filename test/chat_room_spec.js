@@ -7,7 +7,6 @@ var dbURI    = 'mongodb://localhost/mapchat',
 
 describe("ChatRooms", function(){
   beforeEach(function(done){
-    //always connect to db before tests
     if(mongoose.connection.db) return done();
 
     mongoose.connect(dbURI, done);
