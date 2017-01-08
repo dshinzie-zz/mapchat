@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var chatRoomSchema = new Schema({
   roomName: { type: String, required: true, unique: true },
   users: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  description: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

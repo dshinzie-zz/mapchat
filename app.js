@@ -38,16 +38,6 @@ app.listen(mongoose.connection.port, function(err){
   console.log("MongoDB listening on port " + mongoose.connection.port);
 })
 
-// routes
-var index = require('./routes/index');
-// var users = require('./routes/users');
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -56,13 +46,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 app.use(methodOverride());
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+
+
 
 // app.use('/', index);
 // app.use('/login', index);
 // app.use('/users', users);
+
+// var chatrooms = require('./routes/chatrooms');
+// app.use('/chatrooms', chatrooms);
 
 
 
@@ -74,9 +73,9 @@ var io = require('socket.io')(server);
 server.listen(3000);
 console.log("Listening on port 3000");
 
-app.get('/', function (req, res) {
-  res.render('index.ejs');
-});
+// app.get('/', function (req, res) {
+//   res.render('index.ejs');
+// });
 
 io.on('connection', function(socket){
   console.log("User connected");
@@ -154,7 +153,7 @@ function getGoogleProfile(googleClient) {
 // }
 
 
-//setup MVCish structure
+// setup MVCish structure
 fs.readdirSync('./controllers').forEach(function(file){
   if(file.substr(-3) == '.js'){
     route = require('./controllers/' + file);

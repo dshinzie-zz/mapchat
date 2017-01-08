@@ -18,33 +18,15 @@
       <a href="<%= authUrl %>">Login</a>
     </div>
 
-    <div class="">
-      <ul id="messages"></ul>
-      <form action="">
-        <input id="m" autocomplete="off"/><button>Send</button>
-      </form>
+    <div class="container-fluid">
+      <ul class="chat-list">
+        <% for(var i =0; i < rooms.length; i++){ %>
+          <li><a href="/chatrooms/<%= rooms[i]._id %>"><%= rooms[i].roomName %></a></li>
+        <% } %>
+      </ul>
     </div>
+
+
 
   </body>
 </html>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-<script>
-  var socket = io();
-
-  socket.on('connect', function(){
-    console.log("Connecting to server");
-  });
-
-  $('form').submit(function(){
-    //send message to server
-    socket.emit('send message', $('#m').val());
-    $('#m').val('');
-    return false
-  });
-
-  socket.on('send message', function(msg){
-    $('#messages').append($('<li>').text(msg));
-  });
-</script>
