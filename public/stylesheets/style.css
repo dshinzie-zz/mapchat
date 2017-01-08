@@ -89,3 +89,34 @@ a {
 #messages li:nth-child(odd) {
   background: #eee;
 }
+
+/*Chat room List*/
+.chat-container {
+}
+
+.chat-list {
+  min-height: 400px;
+  background: #fff;
+  overflow: hidden;
+  border-radius: 10px;
+  position: relative;
+  line-height: 45px;
+  background: #7ec0ee;
+}
+
+.chat-list-item {
+  margin-top: 10px;
+  padding: 12px 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.chatroom-link:hover,
+.chat-list-item:hover {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #D3D3D3
+}
