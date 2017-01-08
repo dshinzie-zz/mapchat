@@ -73,15 +73,13 @@ var io = require('socket.io')(server);
 server.listen(3000);
 console.log("Listening on port 3000");
 
-
 //Custom chatroom!!!!!
 var ChatRoom = require('./models/chat_room');
-var promise = getChatRoom();
+var Message = require('./models/message');
+var promise = getChatRooms();
 promise.then(function(rooms){
-  console.log(rooms);
-
   rooms.forEach(function(room){
-    console.log('/' + room._id);
+    console.log('Creating connections for room: ' + room._id);
 
     var customRoom = io.of('/' + room._id);
 
@@ -92,8 +90,30 @@ promise.then(function(rooms){
         //message received from client
         console.log('message: ' +  msg);
 
+        //create message for history
+        console.log(session["userId"]);
+
+        var user = User.findOne({_id: session["userId"]}).then(function(user){
+          var newMessage = new Message({
+            content: msg,
+            chatroom: room._id,
+            user: user._id
+          }).save(function(err, message){
+            if(err) {
+              console.log(err);
+              return err;
+            } else {
+              console.log("Message saved");
+
+              //send model based message back to client for everyone to see
+              console.log(message.user.firstName);
+              customRoom.emit('send message', message.content);
+            }
+          });
+        });
+
         //send message back to client for everyone to see
-        customRoom.emit('send message', msg);
+        // customRoom.emit('send message', msg);
       });
 
       //leaving room
@@ -101,34 +121,14 @@ promise.then(function(rooms){
         console.log('User disconnected');
       });
     });
-
-
   });
 
 });
 
-function getChatRoom(){
+function getChatRooms(){
   var promise = ChatRoom.find({}).exec();
   return promise;
 }
-
-
-io.on('connection', function(socket){
-  console.log("User connected");
-
-  socket.on('send message', function(msg){
-    //message received from client
-    console.log('message: ' +  msg);
-
-    //send message back to client for everyone to see
-    io.emit('send message', msg);
-  });
-
-  socket.on('disconnect', function(){
-    console.log('User disconnected');
-  });
-});
-
 
 
 
@@ -156,7 +156,7 @@ app.get("/auth/google/callback", function(req, res) {
 
   getGoogleToken(oauth2Client, code);
 
-  res.render("index");
+  res.redirect("/");
 });
 
 google.options({
@@ -167,8 +167,11 @@ function getGoogleToken (googleClient, code) {
   googleClient.getToken(code, function (err, tokens) {
     if (!err) {
       googleClient.setCredentials(tokens);
-      console.log(googleClient);
+      console.log("Google Client credentials set");
+
       session["token"] = tokens;
+      console.log("Tokens saved to session");
+
       getGoogleProfile(googleClient);
       }
   });
@@ -179,14 +182,22 @@ function getGoogleProfile(googleClient) {
     if(err) {
       return console.log(err);
     }
-      console.log(profile);
       session["googleId"] = profile["id"]
+      console.log("Google ID saved to session.");
+
+      //get user
+      global.currentUser = getUser(profile, session["token"]["access_token"]);
   });
 }
 
-// function findOrCreateUser(googleProfile, session["token"]){
-//
-// }
+
+function getUser(profile, token){
+  var currentUser = User.findOrCreateUser(profile, token, function(user){
+    session["userId"] = user._id;
+    console.log("User ID saved to session.");
+  });
+  return currentUser;
+}
 
 
 // setup MVCish structure

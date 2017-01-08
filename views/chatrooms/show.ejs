@@ -31,7 +31,7 @@
   var socket = io(roomName);
 
   socket.on('connect', function(){
-    console.log("Connecting to server");
+    console.log("Connecting to server for room: " + roomName);
   });
 
   $('form').submit(function(){
