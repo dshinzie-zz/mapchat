@@ -76,20 +76,39 @@ console.log("Listening on port 3000");
 
 //Custom chatroom!!!!!
 var ChatRoom = require('./models/chat_room');
-var promise = getChatRoom("asdf");
-promise.then(function(room){
-  console.log('/' + room._id);
+var promise = getChatRoom();
+promise.then(function(rooms){
+  console.log(rooms);
 
-  var customRoom = io.of('/' + room._id);
+  rooms.forEach(function(room){
+    console.log('/' + room._id);
 
-  customRoom.on('connection', function(socket){
-    console.log("User connected to chatroom");
+    var customRoom = io.of('/' + room._id);
+
+    customRoom.on('connection', function(socket){
+      console.log(`User connected to room: ${room.roomName}`);
+
+      socket.on('send message', function(msg){
+        //message received from client
+        console.log('message: ' +  msg);
+
+        //send message back to client for everyone to see
+        customRoom.emit('send message', msg);
+      });
+
+      //leaving room
+      socket.on('disconnect', function(){
+        console.log('User disconnected');
+      });
+    });
+
+
   });
 
 });
 
-function getChatRoom(name){
-  var promise = ChatRoom.findOne({ roomName: name }).exec();
+function getChatRoom(){
+  var promise = ChatRoom.find({}).exec();
   return promise;
 }
 
