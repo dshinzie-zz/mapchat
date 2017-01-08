@@ -73,9 +73,26 @@ var io = require('socket.io')(server);
 server.listen(3000);
 console.log("Listening on port 3000");
 
-// app.get('/', function (req, res) {
-//   res.render('index.ejs');
-// });
+
+//Custom chatroom!!!!!
+var ChatRoom = require('./models/chat_room');
+var promise = getChatRoom("asdf");
+promise.then(function(room){
+  console.log('/' + room._id);
+
+  var customRoom = io.of('/' + room._id);
+
+  customRoom.on('connection', function(socket){
+    console.log("User connected to chatroom");
+  });
+
+});
+
+function getChatRoom(name){
+  var promise = ChatRoom.findOne({ roomName: name }).exec();
+  return promise;
+}
+
 
 io.on('connection', function(socket){
   console.log("User connected");
