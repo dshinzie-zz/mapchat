@@ -23,7 +23,7 @@ userSchema.statics.findOrCreateUser = function(profile, token, cb){
 
   return this.model('User', userSchema).findOneAndUpdate(query, update, options, function(error, result) {
     if (error) {
-      return console.log(error);
+      console.log(error);
       return cb(null);
     } else {
       result.googleId = profile["id"];

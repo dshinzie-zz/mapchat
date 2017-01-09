@@ -26,17 +26,18 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-  var roomName = `/${window.location.pathname.split("/")[2]}`;
-  console.log(roomName);
-  var socket = io(roomName);
+  var roomName = window.location.pathname.split("/")[2];
+  var socket = io("/" + roomName);
 
   socket.on('connect', function(){
     console.log("Connecting to server for room: " + roomName);
+    $('#messages').append($('<li>').text(" connected to room: " + roomName));
   });
 
   $('form').submit(function(){
     //send message to server
     socket.emit('send message', $('#m').val());
+    console.log("Message sent to server: " + $('#m').val());
     $('#m').val('');
     return false
   });

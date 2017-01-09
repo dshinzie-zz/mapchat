@@ -84,41 +84,38 @@ promise.then(function(rooms){
     var customRoom = io.of('/' + room._id);
 
     customRoom.on('connection', function(socket){
-      console.log(`User connected to room: ${room.roomName}`);
+      if(global.currentUser){
+        app.locals.thisUser = global.currentUser.firstName;
+      } else {
+        app.locals.thisUser = "Guest";
+      }
 
+      console.log(`${app.locals.thisUser} connected to room: ${room.roomName}`);
+
+      //message received from client
       socket.on('send message', function(msg){
-        //message received from client
-        console.log('message: ' +  msg);
+        console.log('Message: received from client: ' +  msg);
 
         //create message for history
-        console.log(session["userId"]);
-
-        var user = User.findOne({_id: session["userId"]}).then(function(user){
-          var newMessage = new Message({
-            content: msg,
-            chatroom: room._id,
-            user: user._id
-          }).save(function(err, message){
-            if(err) {
-              console.log(err);
-              return err;
-            } else {
-              console.log("Message saved");
-
-              //send model based message back to client for everyone to see
-              console.log(message.user.firstName);
-              customRoom.emit('send message', message.content);
-            }
-          });
+        var newMessage = new Message({
+          content: msg,
+          chatroom: room,
+          user: global.currentUser
+        }).save(function(err, message){
+          if(err) {
+            console.log(err);
+            return err;
+          } else {
+            console.log("Message saved");
+            //send model based message back to client for everyone to see
+            customRoom.emit('send message', message.content);
+          }
         });
-
-        //send message back to client for everyone to see
-        // customRoom.emit('send message', msg);
       });
 
       //leaving room
       socket.on('disconnect', function(){
-        console.log('User disconnected');
+        console.log(`User disconnected from room: ${room.roomName}`);
       });
     });
   });
@@ -172,32 +169,31 @@ function getGoogleToken (googleClient, code) {
       session["token"] = tokens;
       console.log("Tokens saved to session");
 
-      getGoogleProfile(googleClient);
-      }
-  });
-}
-
-function getGoogleProfile(googleClient) {
-  plus.people.get({ userId: 'me', auth: googleClient }, function(err, profile) {
-    if(err) {
-      return console.log(err);
+      getGoogleProfile(googleClient, function(user){
+        global.currentUser = user;
+      });
     }
-      session["googleId"] = profile["id"]
-      console.log("Google ID saved to session.");
+  });
+}
 
-      //get user
-      global.currentUser = getUser(profile, session["token"]["access_token"]);
+function getGoogleProfile(googleClient, cb) {
+  plus.people.get({ userId: 'me', auth: googleClient }, function(err, profile) {
+    if(err) return console.log(err);
+
+    session["googleId"] = profile["id"]
+    console.log("Google ID saved to session.");
+
+    //get user
+    // getUser(profile, session["token"]["access_token"], handleUser);
+    User.findOrCreateUser(profile, session["token"]["access_token"], function(user){
+      session["userId"] = user._id;
+      console.log("User ID saved to session.");
+      return cb(user);
+    });
   });
 }
 
 
-function getUser(profile, token){
-  var currentUser = User.findOrCreateUser(profile, token, function(user){
-    session["userId"] = user._id;
-    console.log("User ID saved to session.");
-  });
-  return currentUser;
-}
 
 
 // setup MVCish structure

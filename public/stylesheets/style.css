@@ -20,20 +20,25 @@ a {
   letter-spacing:2px;
 }
 
-.nav-link {
+.nav-link, .navbar-brand {
   border-top: 4px solid white;
   transition: border-top .3s;
-  &:hover{border-top: 4px solid dodgerblue;}
 }
 
-.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{
+.nav-link:hover,
+.navbar-brand:hover {
+  border-top: 4px solid dodgerblue !important;
+}
+
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a {
   background-image:none;
   background-color:dodgerblue;
 }
 
 .header{
   background-color: rgba(255,255,255, .95);
-
   border-bottom:2px solid dodgerblue !important;
   line-height: 40px !important;
   box-shadow: 0 12px 6px -6px rgba(0,0,0, .2) !important;
