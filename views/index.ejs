@@ -6,6 +6,7 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css">
+
     <meta charset="utf-8">
     <title></title>
   </head>
@@ -13,9 +14,47 @@
     <% include shared/navbar %>
 
     <div class="container-fluid">
-      <p>Welcome to MapChat 2</p>
+      <p>Welcome to MapChat</p>
       <a href="<%= authUrl %>">Login</a>
     </div>
 
+    <div class="container-fluid">
+      <div class="chat-container">
+        <h3>Chatrooms</h3>
+        <div class="container-fluid chat-list">
+          <% for(var i =0; i < rooms.length; i++){ %>
+            <a style="display:block;" href="/chatrooms/<%= rooms[i]._id %>" class="chatroom-link">
+              <div class="chat-list-item">
+                <%= rooms[i].roomName %>
+              </div>
+            </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div class="chat-container">
+        <h3>Users</h3>
+        <div class="container-fluid chat-list">
+          <% for(var i =0; i < users.length; i++){ %>
+            <a style="display:block;" class="chatroom-link">
+              <div class="chat-list-item" onclick="newChat('<%= users[i]._id %>')">
+                <%= users[i].firstName %> <%= users[i].lastName %>
+              </div>
+            </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+
   </body>
 </html>
+<script>
+  function newChat(userId){
+    console.log(userId);
+    var myWindow = window.open("/chatrooms/users/" + userId, "", "width=300,height=300");
+  }
+</script>

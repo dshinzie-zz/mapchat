@@ -20,20 +20,25 @@ a {
   letter-spacing:2px;
 }
 
-.nav-link {
+.nav-link, .navbar-brand {
   border-top: 4px solid white;
   transition: border-top .3s;
-  &:hover{border-top: 4px solid dodgerblue;}
 }
 
-.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{
+.nav-link:hover,
+.navbar-brand:hover {
+  border-top: 4px solid dodgerblue !important;
+}
+
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a {
   background-image:none;
   background-color:dodgerblue;
 }
 
 .header{
   background-color: rgba(255,255,255, .95);
-
   border-bottom:2px solid dodgerblue !important;
   line-height: 40px !important;
   box-shadow: 0 12px 6px -6px rgba(0,0,0, .2) !important;
@@ -50,4 +55,73 @@ a {
     z-index:-3;
     margin-top:-10px;
     margin-right: -60% !important;
+}
+
+
+/*Chatroom*/
+.chatroom {
+  background: #000;
+  padding: 3px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.chatroom input {
+  border: 0;
+  padding: 10px;
+  width: 90%;
+  margin-right: .5%;
+}
+
+.chatroom button {
+  width: 9%;
+  background: rgb(130, 224, 255);
+  border: none;
+  padding: 10px;
+}
+
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#messages li {
+  padding: 5px 10px;
+}
+
+#messages li:nth-child(odd) {
+  background: #eee;
+}
+
+/*Chat room List*/
+.chat-container {
+}
+
+.chat-list {
+  min-height: 400px;
+  background: #fff;
+  overflow: hidden;
+  border-radius: 10px;
+  position: relative;
+  line-height: 45px;
+  background: #7ec0ee;
+}
+
+.chat-list-item {
+  margin-top: 10px;
+  padding: 12px 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.chatroom-link:hover,
+.chat-list-item:hover {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #D3D3D3
 }

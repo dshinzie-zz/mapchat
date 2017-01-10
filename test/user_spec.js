@@ -1,9 +1,8 @@
-var dbURI    = 'mongodb://localhost/mapchat'
-  , should   = require('chai').should()
-  , mongoose = require('mongoose')
-  , User = require('../models/user')
-  , clearDB  = require('mocha-mongoose')(dbURI)
-;
+var dbURI    = 'mongodb://localhost/mapchat',
+    should   = require('chai').should(),
+    mongoose = require('mongoose'),
+    User = require('../models/user'),
+    clearDB  = require('mocha-mongoose')(dbURI);
 
 describe("Users", function() {
   beforeEach(function(done) {
@@ -17,22 +16,21 @@ describe("Users", function() {
   });
 
   it("can be saved", function(done) {
-    new User(
-      { firstName: "test",
-        lastName: "test",
-        email: "test",
-        password: "test"
-      }
-    ).save(done);
+    new User({
+      firstName: "test",
+      lastName: "test",
+      email: "test",
+      password: "test"
+      }).save(done);
   });
 
   it("can be saved and listed", function(done) {
-    new User(
-      { firstName: "test",
-        lastName: "test",
-        email: "test",
-        password: "test"
-      }).save(function(err, model) {
+    new User({
+      firstName: "test",
+      lastName: "test",
+      email: "test",
+      password: "test"
+    }).save(function(err, model) {
 
       if(err) return done(err);
 
@@ -43,7 +41,7 @@ describe("Users", function() {
     });
   });
 
-  it("can insert many", function(done) {
+  it("can insert many users", function(done) {
     var users = [
       { firstName: "test", lastName: "test", email: "test", password: "test" },
       { firstName: "test2", lastName: "test2", email: "test2", password: "test2" },
@@ -51,14 +49,11 @@ describe("Users", function() {
     ];
 
     User.insertMany(users, function(err, docs) {
-      if(err){
-        return done(err);
-      } else {
-        User.count({}, function(err, count) {
-          count.should.eq(users.length);
-          done();
-        });
-      }
+      if(err) return done(err);
+      User.count({}, function(err, count) {
+        count.should.eq(users.length);
+        done();
+      });
     });
   });
 
@@ -108,8 +103,32 @@ describe("Users", function() {
           user.email.should.eq("test");
           user.googleId.should.eq(newProfile["id"])
           done();
-          });
         });
+      });
+  });
+
+  it("can delete a user", function(done){
+    var newUser = new User({
+      firstName: "test",
+      lastName: "test",
+      email: "test",
+      password: "test"
+    });
+
+    newUser.save(function(err, user){
+      if(err) return done(err);
+
+      User.remove({ firstName: user.firstName }, function(err, doc){
+        if(err) return done(err);
+
+        User.count({}, function(err, count){
+          if(err) return done(err);
+          
+          count.should.eq(0);
+          done();
+        });
+      });
+    });
   });
 
 

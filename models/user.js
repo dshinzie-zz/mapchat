@@ -7,7 +7,9 @@ var userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   googleId: { type: Number, default: null },
-  token: { type: String, default: null }
+  token: { type: String, default: null },
+  chatRooms: [{ type: Schema.Types.ObjectId, ref: 'ChatRoom' }],
+  createdAt: { type: Date, default: Date.now }
 });
 
 userSchema.statics.findByEmail = function (email) {
@@ -21,14 +23,13 @@ userSchema.statics.findOrCreateUser = function(profile, token, cb){
 
   return this.model('User', userSchema).findOneAndUpdate(query, update, options, function(error, result) {
     if (error) {
-      return console.log(error);
+      console.log(error);
       return cb(null);
     } else {
       result.googleId = profile["id"];
       result.token = token;
       result.firstName = profile["name"]["givenName"];
       result.lastName = profile["name"]["familyName"];
-      console.log(result);
       return cb(result);
     };
   });
