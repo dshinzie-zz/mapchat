@@ -49,22 +49,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride());
 
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-
-
-
-// app.use('/', index);
-// app.use('/login', index);
-// app.use('/users', users);
-
-// var chatrooms = require('./routes/chatrooms');
-// app.use('/chatrooms', chatrooms);
-
-
-
 
 // sockets
 var server = require('http').Server(app);

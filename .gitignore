@@ -27,8 +27,5 @@
  +.DS_Store
  +
 .gitignore
-node_modules/
-npm-debug.log
-data/
 client_secret.json
 google_auth.js
