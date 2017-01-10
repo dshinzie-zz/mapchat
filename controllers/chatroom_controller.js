@@ -18,8 +18,26 @@ module.exports.controller = function(app) {
   });
 
   app.get('/chatrooms/:id', function(req, res){
-    res.render('chatrooms/show');
+    var thisUser;
+
+    if(global.currentUser){
+      thisUser = global.currentUser.firstName;
+    } else {
+      thisUser = "Guest";
+    }
+    res.render('chatrooms/show', { thisUser: thisUser });
   });
-  
+
+  app.get('/chatrooms/users/:id', function(req, res){
+    var thisUser;
+
+    if(global.currentUser){
+      thisUser = global.currentUser.firstName;
+    } else {
+      thisUser = "Guest";
+    }
+    res.render('chatrooms/dm', { thisUser: thisUser });
+  });
+
 
 }

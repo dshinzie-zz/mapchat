@@ -14,7 +14,7 @@
     <% include shared/navbar %>
 
     <div class="container-fluid">
-      <p>Welcome to MapChat 2</p>
+      <p>Welcome to MapChat</p>
       <a href="<%= authUrl %>">Login</a>
     </div>
 
@@ -33,5 +33,28 @@
       </div>
     </div>
 
+
+    <div class="container-fluid">
+      <div class="chat-container">
+        <h3>Users</h3>
+        <div class="container-fluid chat-list">
+          <% for(var i =0; i < users.length; i++){ %>
+            <a style="display:block;" class="chatroom-link">
+              <div class="chat-list-item" onclick="newChat('<%= users[i]._id %>')">
+                <%= users[i].firstName %> <%= users[i].lastName %>
+              </div>
+            </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+
   </body>
 </html>
+<script>
+  function newChat(userId){
+    console.log(userId);
+    var myWindow = window.open("/chatrooms/users/" + userId, "", "width=300,height=300");
+  }
+</script>

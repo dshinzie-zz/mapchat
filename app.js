@@ -75,22 +75,27 @@ console.log("Listening on port 3000");
 
 //Custom chatroom!!!!!
 var ChatRoom = require('./models/chat_room');
+var User = require('./models/user');
 var Message = require('./models/message');
-var promise = getChatRooms();
-promise.then(function(rooms){
+
+
+//connect to global chat room
+var chatRoomPromise = getChatRooms();
+chatRoomPromise.then(function(rooms){
   rooms.forEach(function(room){
     console.log('Creating connections for room: ' + room._id);
 
     var customRoom = io.of('/' + room._id);
 
     customRoom.on('connection', function(socket){
+
       if(global.currentUser){
-        app.locals.thisUser = global.currentUser.firstName;
+        thisUser = global.currentUser.firstName;
       } else {
-        app.locals.thisUser = "Guest";
+        thisUser = "Guest";
       }
 
-      console.log(`${app.locals.thisUser} connected to room: ${room.roomName}`);
+      console.log(`${thisUser} connected to room: ${room.roomName}`);
 
       //message received from client
       socket.on('send message', function(msg){
@@ -119,11 +124,63 @@ promise.then(function(rooms){
       });
     });
   });
+});
+
+//connect to direct message room
+var userPromise = getUsers();
+userPromise.then(function(users){
+  users.forEach(function(user){
+    console.log('Creating connections for user: ' + user._id);
+
+    var customRoom = io.of('/' + user._id);
+
+    customRoom.on('connection', function(socket){
+
+      if(global.currentUser){
+        thisUser = global.currentUser.firstName;
+      } else {
+        thisUser = "Guest";
+      }
+
+      console.log(`${thisUser} connected to user: ${user.firstName} ${user.lastName} `);
+
+      //message received from client
+      socket.on('send message', function(msg){
+        console.log('Message: received from client: ' +  msg);
+
+        //create message for history
+        var newMessage = new Message({
+          content: msg,
+          chatroom: user,
+          user: global.currentUser
+        }).save(function(err, message){
+          if(err) {
+            console.log(err);
+            return err;
+          } else {
+            console.log("Message saved");
+            //send model based message back to client for everyone to see
+            customRoom.emit('send message', message.content);
+          }
+        });
+      });
+
+      //leaving room
+      socket.on('disconnect', function(){
+        console.log(`User disconnected from room: ${user.firstName} ${user.lastName}`);
+      });
+    });
+  });
 
 });
 
 function getChatRooms(){
   var promise = ChatRoom.find({}).exec();
+  return promise;
+}
+
+function getUsers(){
+  var promise = User.find({}).exec();
   return promise;
 }
 
@@ -184,7 +241,6 @@ function getGoogleProfile(googleClient, cb) {
     console.log("Google ID saved to session.");
 
     //get user
-    // getUser(profile, session["token"]["access_token"], handleUser);
     User.findOrCreateUser(profile, session["token"]["access_token"], function(user){
       session["userId"] = user._id;
       console.log("User ID saved to session.");

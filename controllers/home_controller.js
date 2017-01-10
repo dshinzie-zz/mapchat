@@ -7,7 +7,9 @@ module.exports.controller = function(app) {
 
   app.get('/', function(req, res, next) {
     ChatRoom.find({}, function(err, rooms){
-      res.render('index', { title: 'MapChat', rooms: rooms });
+      User.find({}, function(err, users){
+        res.render('index', { title: 'MapChat', rooms: rooms, users: users });
+      });
     });
   });
 
