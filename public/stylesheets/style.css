@@ -60,11 +60,11 @@ a {
 
 /*Chatroom*/
 .chatroom {
-  background: #000;
+  background: #4C7F7F;
   padding: 3px;
   position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 40%;
 }
 
 .chatroom input {
@@ -124,4 +124,8 @@ a {
   text-decoration: none;
   cursor: pointer;
   background-color: #D3D3D3
+}
+
+body {
+  padding-top: 70px !important;
 }

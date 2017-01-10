@@ -17,10 +17,14 @@ var User = require('./models/user');
 
 var session = require('express-session');
 
+
 //bootstrap
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+
+// statics
+app.use('/node_modules', express.static(__dirname + '/node_modules')); // redirect bootstrap JS
 
 var expressLayouts = require('express-ejs-layouts');
 
@@ -38,6 +42,8 @@ app.listen(mongoose.connection.port, function(err){
   console.log("MongoDB listening on port " + mongoose.connection.port);
 })
 
+//Declare Angular module
+// var mapChat = angular.module('mapChat', []);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -46,7 +52,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(methodOverride());
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+
 
 
 
