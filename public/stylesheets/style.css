@@ -126,6 +126,10 @@ a {
   background-color: #D3D3D3
 }
 
-body {
-  padding-top: 70px !important;
+
+/*Map*/
+#map {
+  height: 100%;
+  float: left;
+  width: 70%;
 }

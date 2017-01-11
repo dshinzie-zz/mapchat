@@ -25,6 +25,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 // statics
 app.use('/node_modules', express.static(__dirname + '/node_modules')); // redirect bootstrap JS
+app.use('/bower_components', express.static(__dirname + '/bower_components')); // redirect bootstrap JS
 
 var expressLayouts = require('express-ejs-layouts');
 
@@ -42,8 +43,6 @@ app.listen(mongoose.connection.port, function(err){
   console.log("MongoDB listening on port " + mongoose.connection.port);
 })
 
-//Declare Angular module
-// var mapChat = angular.module('mapChat', []);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -52,14 +51,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(methodOverride());
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 
 
 
@@ -97,7 +94,7 @@ chatRoomPromise.then(function(rooms){
 
       //message received from client
       socket.on('send message', function(msg){
-        console.log('Message: received from client: ' +  msg);
+        console.log('Message received from client: ' +  msg);
 
         //create message for history
         var newMessage = new Message({
@@ -112,6 +109,27 @@ chatRoomPromise.then(function(rooms){
             console.log("Message saved");
             //send model based message back to client for everyone to see
             customRoom.emit('send message', message.content);
+          }
+        });
+      });
+
+      //location received from client
+      socket.on('send location', function(msg){
+        console.log('Location received from client: ' +  msg);
+
+        var newMessage = new Message({
+          content: msg,
+          chatroom: room,
+          location: msg,
+          user: global.currentUser
+        }).save(function(err, message){
+          if(err) {
+            console.log(err);
+            return err;
+          } else {
+            console.log("Message saved");
+            //send model based message back to client for everyone to see
+            customRoom.emit('send location', message.content);
           }
         });
       });
