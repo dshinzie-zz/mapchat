@@ -41,7 +41,7 @@ var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/mapchat');
-mongoose.connect('MONGODB_URI: mongodb://heroku_xs48mxff:nsq2u8fe8rq7os598egcgqtuta@ds159998.mlab.com:59998/heroku_xs48mxff');
+mongoose.connect('mongodb://heroku_xs48mxff:nsq2u8fe8rq7os598egcgqtuta@ds159998.mlab.com:59998/heroku_xs48mxff');
 
 mongoose.connection.on('connected', function() {
   console.log('Mongoose default connection open to ' + mongoose.connection.name);
