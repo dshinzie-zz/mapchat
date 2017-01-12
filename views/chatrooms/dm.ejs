@@ -25,25 +25,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-  var userId = window.location.pathname.split("/")[3];
-  var socket = io("/" + userId);
   var currentUser = <%- JSON.stringify(thisUser) %>;
-
-  socket.on('connect', function(){
-    console.log("Connecting to server for direct message: " + userId);
-    $('#messages').append($('<li>').text(currentUser + " connected to user: " + userId));
-  });
-
-  $('form').submit(function(){
-    //send message to server
-    socket.emit('send message', $('#m').val());
-    console.log("Message sent to server: " + $('#m').val());
-    $('#m').val('');
-    return false
-  });
-
-  socket.on('send message', function(msg){
-    var line = `${currentUser}: ${msg}`;
-    $('#messages').append($('<li>').text(line));
-  });
 </script>
+<script src="/javscripts/sockets-dm.js"></script>
