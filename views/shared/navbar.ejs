@@ -6,18 +6,23 @@
           <a class="navbar-brand" href="/">MapChat</a>
         </div>
         <ul class="nav navbar-nav pull-right">
-          <li><a class="nav-link">CHAT</a></li>
+          <li><a class="nav-link" href="/chatrooms/index">CHAT</a></li>
           <li><a class="nav-link">LOAD MAP</a></li>
           <li><a class="nav-link">HELP</a></li>
+          <% if(global.currentUser == ''){ %>
+          <li><a class="nav-link" href="<%= authUrl %>">LOGIN</a></li>
+          <%} else {%>
           <li class="dropdown">
             <a class="dropdown-toggle nav-link" data-toggle="dropdown">PROFILE
               <ul class="dropdown-menu text-center">
                 <li><a>Edit Account</a></li>
+                <li><a href="/chatrooms/new">Create Chatroom</a></li>
                 <li><a>View History</a></li>
-                <li><a>Logout</a></li>
+                <li><a href="/logout">Logout</a></li>
               </ul>
             </a>
           </li>
+          <% } %>
         </ul>
       </div>
     </nav>

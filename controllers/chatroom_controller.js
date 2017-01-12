@@ -4,6 +4,14 @@ var ChatRoom = require('../models/chat_room');
 
 module.exports.controller = function(app) {
 
+  app.get('/chatrooms/index', function(req, res){
+    ChatRoom.find({}, function(err, rooms){
+      User.find({}, function(err, users){
+        res.render('chatrooms/index', { title: 'MapChat', rooms: rooms, users: users });
+      });
+    });
+  });
+
   app.get('/chatrooms/new', function(req, res) {
     res.render('chatrooms/new');
   });

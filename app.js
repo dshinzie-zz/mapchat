@@ -16,7 +16,13 @@ var authKeys = require('./config/google_auth').googleAuth;
 var User = require('./models/user');
 
 var session = require('express-session');
-
+app.use(session({
+  name: 'mapchat-cookie',
+  secret: 'keyboard cat',
+  saveUninitialized: true,
+  resave: true,
+  cookie: { maxAge: 60000 }
+}));
 
 //bootstrap
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
@@ -244,9 +250,11 @@ function getGoogleToken (googleClient, code) {
 
       getGoogleProfile(googleClient, function(user){
         global.currentUser = user;
+        global.fullName = `${user.firstName}`;
       });
     }
   });
+
 }
 
 function getGoogleProfile(googleClient, cb) {

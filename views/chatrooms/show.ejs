@@ -13,7 +13,7 @@
     <% include ../shared/navbar %>
 
     <div class="col-md-7">
-      <div id="map" style="width:700px; height:700px; margin-top:8%;"></div>
+      <div id="map" style="width:700px; height:700px;"></div>
     </div>
 
     <div class="col-md-5">
@@ -71,7 +71,6 @@
 
       calculateAndDisplayRoute(window.directionsService, window.directionsDisplay, waypts);
      });
-
   });
 
   function initMap() {
@@ -83,7 +82,7 @@
        mapTypeId: 'satellite',
        disableDoubleClickZoom: true
     });
-
+    map.setTilt(0);
     window.directionsDisplay.setMap(map);
     map.addListener('dblclick', function(event) {
       placeMarker(event.latLng, map, directionsService, directionsDisplay);
