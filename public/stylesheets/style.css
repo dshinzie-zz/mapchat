@@ -249,6 +249,55 @@ footer,
   text-align: center;
 }
 
+
+/*Input*/
+
+.input-form form .text-input {
+  overflow: hidden;
+  margin-bottom: .875em;
+}
+.input-form form input[type="text"],
+.input-form form input[type="textarea"] {
+  width: 300px;
+  padding: 1em 0 12px;
+  padding-left: 0;
+  background: none;
+  color: black;
+  font-size: 1.2em;
+  font-weight: 400;
+  border: none;
+}
+.input-form input[type="text"]:focus + .separator,
+.input-form  input[type="textarea"]:focus + .separator {
+  transform: scaleX(1) translateY(-2px);
+  opacity: 1;
+}
+.input-form  input[type="submit"] {
+  color: white;
+  padding: 1em 1.4em;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10px;
+}
+
+.separator {
+  height: 3px;
+  width: 100%;
+  display: block;
+  transform: scaleX(0) translateY(-2px);
+  transform-origin: 50%;
+  opacity: 0;
+}
+
+.input-form  label{
+  font-size: 20px;
+}
+.input-form {
+  padding-top: 5%;
+  text-align: center;
+}
+
+
 /*Map*/
 #map {
   height: 100%;

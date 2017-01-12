@@ -12,10 +12,19 @@
     <% include ../shared/navbar %>
     <h1 class="text-center">Create a New Chat</h1>
 
-    <form action="/chatrooms" method="post">
-      <input type="text" name="chat-name" id="chat-name" placeholder="Room Name">
-      <input type="textarea" name="chat-description" id="chat-description" placeholder="Room Description">
-      <input type="submit" class="enter-submit" value="Submit">
-    </form>
+    <div class="input-form">
+      <form action="/chatrooms" method="post" class="text-input">
+        <label for="chat-name">Room Name</label>
+        <input type="text" name="chat-name" id="chat-name" placeholder="Room Name">
+        <span class="separator"> </span>
+
+        <label for="chat-description">Room Description</label>
+        <input type="textarea" name="chat-description" id="chat-description" placeholder="Room Description">
+        <span class="separator"> </span>
+
+        <input type="submit" class="enter-submit" value="Submit">
+      </form>
+    </div>
+
   </body>
 </html>
