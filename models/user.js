@@ -8,7 +8,6 @@ var userSchema = new Schema({
   password: { type: String, required: true },
   googleId: { type: Number, default: null },
   token: { type: String, default: null },
-  chatRooms: [{ type: Schema.Types.ObjectId, ref: 'ChatRoom' }],
   createdAt: { type: Date, default: Date.now }
 });
 

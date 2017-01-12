@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var fs = require('fs');
 var app = express();
+var cors = require('cors')
 
 //google oauth
 var google = require('googleapis');
@@ -40,8 +41,8 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://localhost/mapchat');
-mongoose.connect('mongodb://heroku_xs48mxff:nsq2u8fe8rq7os598egcgqtuta@ds159998.mlab.com:59998/heroku_xs48mxff');
+mongoose.connect('mongodb://localhost/mapchat');
+// mongoose.connect('mongodb://heroku_xs48mxff:nsq2u8fe8rq7os598egcgqtuta@ds159998.mlab.com:59998/heroku_xs48mxff');
 
 mongoose.connection.on('connected', function() {
   console.log('Mongoose default connection open to ' + mongoose.connection.name);
@@ -60,13 +61,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride());
+app.use(cors());
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-
 
 
 // sockets
@@ -80,7 +80,6 @@ console.log("Listening on port 3000");
 var ChatRoom = require('./models/chat_room');
 var User = require('./models/user');
 var Message = require('./models/message');
-
 
 //connect to global chat room
 var chatRoomPromise = getChatRooms();
@@ -208,9 +207,6 @@ function getUsers(){
   return promise;
 }
 
-
-
-
 //google oauth
 var oauth2Client = new OAuth2(authKeys.clientId, authKeys.clientSecret, authKeys.callbackUrl);
 
@@ -274,8 +270,6 @@ function getGoogleProfile(googleClient, cb) {
     });
   });
 }
-
-
 
 
 // setup MVCish structure
