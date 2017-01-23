@@ -7,3 +7,4 @@ mongod --dbpath /"project installation path"/data
 ##Run Node
 Kick off the Node app by running:
 npm start
+
